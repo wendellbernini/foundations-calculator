@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div id="divMaster">
+        <div id="display"><p id="displayP"></p></div>
+        <div id="operations">
+            <div id="buttonsForNum">
+                <button class="numButton" id="1">1</button>
+                <button class="numButton" id="2">2</button>
+                <button class="numButton" id="3">3</button>
+                <button class="numButton" id="4">4</button>
+                <button class="numButton" id="5">5</button>
+                <button class="numButton" id="6">6</button>
+                <button class="numButton" id="7">7</button>
+                <button class="numButton" id="8">8</button>
+                <button class="numButton" id="9">9</button>
+                <button class="numButton" id="0">0</button>
+                <button class="specialButton" id="c">AC</button>
+                <button class="specialButton" id="=">=</button>
+                <button class="specialButton" id=".">.</button>
+                <button class="specialButton" id="backspace"><</button>
+                
+            </div>
+            <div id="buttonsForOp">
+                <button class="opButton" id="+">+</button>
+                <button class="opButton" id="-">-</button>
+                <button class="opButton" id="*">*</button>
+                <button class="opButton" id="/">/</button>
+            </div-
+        </div>
+    </div>
+
+
+
+
+
+<script>
+
+const display = document.querySelector('#displayP')
+const numButton = document.querySelectorAll('.numButton')
+const opButton = document.querySelectorAll('.opButton')
+const specialButton = document.querySelectorAll('.specialButton')
+
+const addFunc = (numOne, numTwo) => {
+    return (numOne + numTwo).toFixed(2)
+}
+
+const subFunc = (numOne, numTwo) => {
+    return (numOne - numTwo).toFixed(2)
+}
+
+const multiFunc = (numOne, numTwo) => {
+    return (numOne * numTwo).toFixed(2)
+}
+
+const divFunc = (numOne, numTwo) => { 
+    return numTwo === 0 ? "Não é possível dividir por 0" : (numOne / numTwo).toFixed(2)
+}
+
+
+let numOne = ""
+let operator = ""
+let numTwo = ""
+
+
+const operate = (numOne, operator,numTwo) =>{
+    switch (operator) {
+        case "+":
+            return(addFunc(numOne,numTwo))
+            break;
+        case "-":
+            return(subFunc(numOne,numTwo))
+            break;
+        case "*":
+            return(multiFunc(numOne,numTwo))
+            break;
+        case "/":
+            return(divFunc(numOne,numTwo))
+            break;
+        default:
+            return("Operação inválida.")
+
+    }
+}
+
+let numOneBox = ""
+numButton.forEach(button=> {
+    button.addEventListener('click', (event)=>{
+        if(numOneBox === ""){
+         numOne += parseInt(event.target.id)
+         display.textContent = parseFloat(numOne)
+        }
+        else {
+            numTwo += parseInt(event.target.id)
+            display.textContent = numOne + operator + numTwo
+        }
+})})
+
+
+opButton.forEach(button=> {
+    button.addEventListener('click', (event)=>{
+    if(!operator){
+     numOneBox = display.textContent
+     operator = event.target.id
+     display.textContent = numOne + operator
+    }
+    else {
+        numOne = parseFloat(numOne)
+        numTwo = parseFloat(numTwo)
+        display.textContent = operate(numOne, operator, numTwo)
+        numOne = operate(numOne, operator, numTwo)
+        operator = event.target.id
+        numTwo = ""
+    }
+     
+    })
+})
+
+specialButton.forEach(button=>{
+    button.addEventListener('click', (event)=>{
+        if (event.target.id === "="){
+        numOne = parseFloat(numOne)
+        numTwo = parseFloat(numTwo)
+        display.textContent = operate(numOne, operator, numTwo)
+        numOne = ""
+        numTwo = ""
+        operator = ""
+    }
+    else if (event.target.id === "c") {
+        numOne = "";
+        numTwo = "";
+        operator = "";
+        numOneBox = ''
+        display.textContent = "";
+    }
+    else if (event.target.id === "."){
+        if (!operator && !numOne.includes('.')){
+        numOne += "."
+        display.textContent = numOne
+        }
+        else if (operator && !numTwo.includes('.')){
+        numTwo += "."
+        display.textContent = numOne + operator + numTwo  
+        }
+    }
+    else if (event.target.id === "backspace"){
+        if(!operator){
+        removeLast = numOne.split('')
+        removeLast.pop()
+        numOne = removeLast
+        display.textContent = numOne
+        }
+        if(operator){
+        removeLastTwo = numTwo.split('')
+        removeLastTwo.pop()
+        numTwo = removeLastTwo
+        display.textContent = numOne + operator + numTwo   
+        }
+    }
+
+})
+})
+
+
+
+
+
+
+</script>
+    
+</body>
+</html>
